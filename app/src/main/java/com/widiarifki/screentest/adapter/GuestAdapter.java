@@ -58,7 +58,7 @@ public class GuestAdapter extends RecyclerView.Adapter {
 
                 Fragment secondFrag = new SecondFragment();
                 secondFrag.setArguments(args);
-                ((MainActivity)mContext).setFragment(secondFrag);
+                ((MainActivity)mContext).setFragment(secondFrag, SecondFragment.TITLE);
             }
         });
         return new GuestViewHolder(view);
@@ -77,6 +77,7 @@ public class GuestAdapter extends RecyclerView.Adapter {
     }
 
     private boolean isPrime(int n) {
+        if(n < 2) return false;
         for (int i = 2; i < n; i++)
             if(n%i == 0)
                 return false;

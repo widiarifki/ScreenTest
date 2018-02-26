@@ -49,8 +49,8 @@ public class HomeFragment extends Fragment {
                         .create()
                         .show();
 
-                ((MainActivity)mContext).setName(name);
-                ((MainActivity)mContext).setFragment(new SecondFragment());
+                mMainActivity.setName(name);
+                mMainActivity.setFragment(new SecondFragment(), SecondFragment.TITLE);
             }
         });
 

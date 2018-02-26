@@ -5,22 +5,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               tools:context="com.widiarifki.screentest.fragment.EventFragment"
-              android:layout_marginLeft="8dp"
-              android:layout_marginRight="8dp">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:text="EVENT"
-        android:padding="6dp"
-        android:gravity="center"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorPrimary"
-        android:layout_marginBottom="6dp"/>
+              android:padding="4dp">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"

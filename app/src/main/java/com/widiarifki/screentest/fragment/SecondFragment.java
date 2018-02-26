@@ -14,14 +14,20 @@ import com.widiarifki.screentest.R;
 
 public class SecondFragment extends Fragment {
 
+    private Fragment mThis;
     private Context mContext;
     private String mGuest;
     private String mEvent;
+    private MainActivity mMainActivity;
+    public static String TITLE = "Screen Test";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mThis = this;
         mContext = getContext();
+        mMainActivity = ((MainActivity)mContext);
+        mMainActivity.showActionBar(true);
 
         if (getArguments() != null) {
             mGuest = getArguments().getString("GUEST");
@@ -34,13 +40,13 @@ public class SecondFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_second, container, false);
 
         TextView txtName = (TextView) view.findViewById(R.id.txtName);
-        txtName.setText("Nama: " + ((MainActivity)mContext).getName());
+        txtName.setText("Nama: " + mMainActivity.getName());
 
         Button btnEvent = (Button) view.findViewById(R.id.btnEvent);
         btnEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)mContext).setFragment(new EventFragment());
+                mMainActivity.addStackedFragment(mThis, TITLE, new EventFragment(), EventFragment.TITLE);
             }
         });
         if(mEvent != null) btnEvent.setText("SELECTED EVENT: " + mEvent);
@@ -49,7 +55,7 @@ public class SecondFragment extends Fragment {
         btnGuest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)mContext).setFragment(new GuestFragment());
+                mMainActivity.addStackedFragment(mThis, TITLE, new GuestFragment(), GuestFragment.TITLE);
             }
         });
         if(mGuest != null) btnGuest.setText("SELECTED GUEST: " + mGuest);

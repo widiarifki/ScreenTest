@@ -8,18 +8,37 @@
     tools:context="com.widiarifki.screentest.MainActivity"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/content_layout"
+    <!--<LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">-->
 
-    <TextView
+        <!-- ToolBar
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"/>
+        </android.support.design.widget.AppBarLayout>-->
+
+        <FrameLayout
+            android:id="@+id/content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+    <!--</LinearLayout>-->
+
+    <!--<TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="4dp"
         android:gravity="center"
         android:background="#dddddd"
-        android:text="Widia Rifkianti"/>
+        android:text="Widia Rifkianti"/>-->
 
 </LinearLayout>

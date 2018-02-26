@@ -44,7 +44,7 @@ public class EventAdapter extends RecyclerView.Adapter {
                 args.putString("EVENT", eventData.getNama());
                 Fragment secondFrag = new SecondFragment();
                 secondFrag.setArguments(args);
-                ((MainActivity)mContext).setFragment(secondFrag);
+                ((MainActivity)mContext).setFragment(secondFrag, SecondFragment.TITLE);
             }
         });
         return new EventViewHolder(view);
@@ -56,6 +56,7 @@ public class EventAdapter extends RecyclerView.Adapter {
         EventViewHolder viewHolder = (EventViewHolder) holder;
         viewHolder.txtEvent.setText(dataItem.getNama());
         viewHolder.txtEventDate.setText(dataItem.getTanggal());
+        viewHolder.txtDesc.setText(dataItem.getDesc());
         viewHolder.imgEvent.setImageResource(dataItem.getImgResId());
     }
 
@@ -68,12 +69,14 @@ public class EventAdapter extends RecyclerView.Adapter {
         ImageView imgEvent;
         TextView txtEvent;
         TextView txtEventDate;
+        TextView txtDesc;
 
         public EventViewHolder(View view) {
             super(view);
             imgEvent = (ImageView) view.findViewById(R.id.imgEvent);
             txtEvent = (TextView) view.findViewById(R.id.txtEvent);
             txtEventDate = (TextView) view.findViewById(R.id.txtEventDate);
+            txtDesc = (TextView) view.findViewById(R.id.txtDesc);
         }
     }
 }
