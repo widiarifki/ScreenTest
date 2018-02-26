@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,21 @@ import com.widiarifki.screentest.R;
 
 public class HomeFragment extends Fragment {
 
+    Context mContext;
+    MainActivity mMainActivity;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = getContext();
+        mMainActivity = ((MainActivity)mContext);
+        mMainActivity.showActionBar(false);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        final Context context = getContext();
 
         final EditText inputName = (EditText) view.findViewById(R.id.inputName);
         Button btnEnter = (Button) view.findViewById(R.id.btnEnter);
@@ -31,11 +42,24 @@ public class HomeFragment extends Fragment {
         btnEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)context).setName(inputName.getText().toString());
-                ((MainActivity)context).setFragment(new SecondFragment());
+                String name = inputName.getText().toString();
+                // Show whether name palindrome/not
+                new AlertDialog.Builder(mContext).setTitle(name)
+                        .setMessage(isPalindrome(name) ? "is Palindrome" : "not Palindrome")
+                        .create()
+                        .show();
+
+                ((MainActivity)mContext).setName(name);
+                ((MainActivity)mContext).setFragment(new SecondFragment());
             }
         });
 
         return view;
+    }
+
+    private boolean isPalindrome(String name) {
+        String word = name.replace(" ", "");
+        String revWord = new StringBuilder(word).reverse().toString();
+        return word.equals(revWord);
     }
 }
