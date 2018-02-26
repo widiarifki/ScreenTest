@@ -70,6 +70,17 @@ public class GuestAdapter extends RecyclerView.Adapter {
         GuestViewHolder viewHolder = (GuestViewHolder) holder;
         viewHolder.txtName.setText(dataItem.getName());
         viewHolder.txtBirthDate.setText(dataItem.getBirthDate());
+        // Check whether month prime/not
+        String[] birthDateSplit = dataItem.getBirthDate().split("-");
+        int month = Integer.parseInt(birthDateSplit[1]);
+        viewHolder.txtIsPrime.setText("Month Number: " + (isPrime(month) ? "PRIME" : "NOT PRIME"));
+    }
+
+    private boolean isPrime(int n) {
+        for (int i = 2; i < n; i++)
+            if(n%i == 0)
+                return false;
+        return true;
     }
 
     @Override
@@ -80,11 +91,13 @@ public class GuestAdapter extends RecyclerView.Adapter {
     private class GuestViewHolder extends RecyclerView.ViewHolder {
         public TextView txtName;
         public TextView txtBirthDate;
+        public TextView txtIsPrime;
 
         public GuestViewHolder(View view) {
             super(view);
             txtName = (TextView) view.findViewById(R.id.txtName);
             txtBirthDate = (TextView) view.findViewById(R.id.txtBirthDate);
+            txtIsPrime = (TextView) view.findViewById(R.id.txtIsPrime);
         }
     }
 }
