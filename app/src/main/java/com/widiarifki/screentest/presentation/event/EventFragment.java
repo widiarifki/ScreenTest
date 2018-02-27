@@ -1,4 +1,4 @@
-package com.widiarifki.screentest.fragment;
+package com.widiarifki.screentest.presentation.event;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,38 +16,43 @@ import android.view.ViewGroup;
 import com.widiarifki.screentest.MainActivity;
 import com.widiarifki.screentest.R;
 import com.widiarifki.screentest.adapter.EventAdapter;
+import com.widiarifki.screentest.presentation.mapview.MapViewFragment;
 import com.widiarifki.screentest.model.Event;
 
 import java.util.List;
 
 /**
- * Created by widiarifki on 24/02/2018.
+ * Created by widiarifki on 27/02/2018.
  */
 
-public class EventFragment extends Fragment {
+public class EventFragment extends Fragment implements IEventView {
+
+    public static String TITLE = "Event";
 
     private Context mContext;
     private MainActivity mMainActivity;
-    public static String TITLE = "Event";
+    private EventPresenter eventPresenter;
+
+    private RecyclerView mRecyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getContext();
-        setHasOptionsMenu(true);
         mMainActivity = ((MainActivity) mContext);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event, container, false);
+        eventPresenter = new EventPresenter(this);
 
-        List<Event> eventList = Event.dummyEvents();
-        EventAdapter adapter = new EventAdapter(mContext, eventList);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+
+        eventPresenter.setEventList(Event.dummyEvents());
+
         return view;
     }
 
@@ -61,9 +66,21 @@ public class EventFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add_map) {
-            mMainActivity.addStackedFragment(this, TITLE, new MapViewFragment(), MapViewFragment.TITLE);
+            goToMapview();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void showList(List<Event> eventList) {
+        EventAdapter adapter = new EventAdapter(mContext, eventList);
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+    }
+
+    @Override
+    public void goToMapview() {
+        mMainActivity.addStackedFragment(this, TITLE, new MapViewFragment(), MapViewFragment.TITLE);
     }
 }

@@ -7,7 +7,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.widiarifki.screentest.fragment.HomeFragment;
+//import com.widiarifki.screentest.fragment.HomeFragment;
+import com.widiarifki.screentest.presentation.home.HomeFragment;
 
 public class MainActivity extends AppCompatActivity {
 
