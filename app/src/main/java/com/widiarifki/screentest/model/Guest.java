@@ -7,7 +7,7 @@ package com.widiarifki.screentest.model;
 public class Guest {
     int id;
     String name;
-    String birthDate;
+    String birthdate;
 
     public int getId() {
         return id;
@@ -25,11 +25,11 @@ public class Guest {
         this.name = name;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public String getBirthdate() {
+        return birthdate;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
     }
 }

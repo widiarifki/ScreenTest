@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import com.widiarifki.screentest.MainActivity;
 import com.widiarifki.screentest.R;
-import com.widiarifki.screentest.fragment.SecondFragment;
 import com.widiarifki.screentest.model.Event;
+import com.widiarifki.screentest.presentation.menu.MenuFragment;
 
 import java.util.List;
 
@@ -42,9 +42,9 @@ public class EventAdapter extends RecyclerView.Adapter {
 
                 Bundle args = new Bundle();
                 args.putString("EVENT", eventData.getNama());
-                Fragment secondFrag = new SecondFragment();
+                Fragment secondFrag = new MenuFragment();
                 secondFrag.setArguments(args);
-                ((MainActivity)mContext).setFragment(secondFrag, SecondFragment.TITLE);
+                ((MainActivity)mContext).setFragment(secondFrag, MenuFragment.TITLE);
             }
         });
         return new EventViewHolder(view);

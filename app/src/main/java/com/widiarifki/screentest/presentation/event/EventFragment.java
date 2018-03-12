@@ -16,8 +16,8 @@ import android.view.ViewGroup;
 import com.widiarifki.screentest.MainActivity;
 import com.widiarifki.screentest.R;
 import com.widiarifki.screentest.adapter.EventAdapter;
-import com.widiarifki.screentest.presentation.mapview.MapViewFragment;
 import com.widiarifki.screentest.model.Event;
+import com.widiarifki.screentest.presentation.mapview.MapViewFragment;
 
 import java.util.List;
 

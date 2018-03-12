@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import com.widiarifki.screentest.MainActivity;
 import com.widiarifki.screentest.R;
-import com.widiarifki.screentest.fragment.SecondFragment;
 import com.widiarifki.screentest.model.Guest;
+import com.widiarifki.screentest.presentation.menu.MenuFragment;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class GuestAdapter extends RecyclerView.Adapter {
                 Guest guestData = mObjects.get(position);
 
                 // Conditional Display
-                String[] birthDateSplit = guestData.getBirthDate().split("-");
+                String[] birthDateSplit = guestData.getBirthdate().split("-");
                 int date = Integer.parseInt(birthDateSplit[2]);
 
                 String displayedTxt = "";
@@ -56,9 +56,9 @@ public class GuestAdapter extends RecyclerView.Adapter {
                 Bundle args = new Bundle();
                 args.putString("GUEST", guestData.getName());
 
-                Fragment secondFrag = new SecondFragment();
+                Fragment secondFrag = new MenuFragment();
                 secondFrag.setArguments(args);
-                ((MainActivity)mContext).setFragment(secondFrag, SecondFragment.TITLE);
+                ((MainActivity)mContext).setFragment(secondFrag, MenuFragment.TITLE);
             }
         });
         return new GuestViewHolder(view);
@@ -69,9 +69,9 @@ public class GuestAdapter extends RecyclerView.Adapter {
         Guest dataItem = mObjects.get(position);
         GuestViewHolder viewHolder = (GuestViewHolder) holder;
         viewHolder.txtName.setText(dataItem.getName());
-        viewHolder.txtBirthDate.setText(dataItem.getBirthDate());
+        viewHolder.txtBirthDate.setText(dataItem.getBirthdate());
         // Check whether month prime/not
-        String[] birthDateSplit = dataItem.getBirthDate().split("-");
+        String[] birthDateSplit = dataItem.getBirthdate().split("-");
         int month = Integer.parseInt(birthDateSplit[1]);
         viewHolder.txtIsPrime.setText("Month Number: " + (isPrime(month) ? "PRIME" : "NOT PRIME"));
     }

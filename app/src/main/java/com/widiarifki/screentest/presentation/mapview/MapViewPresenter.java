@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 
-import com.widiarifki.screentest.fragment.ImageSlideFragment;
 import com.widiarifki.screentest.model.Event;
 
 import java.util.ArrayList;
