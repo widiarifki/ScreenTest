@@ -1,42 +1,33 @@
-package com.widiarifki.screentest.presentation.guest;
+package com.widiarifki.screentest.presentation.guest
 
-import com.widiarifki.screentest.model.Guest;
-import com.widiarifki.screentest.services.GuestService;
-import com.widiarifki.screentest.services.ServiceBuilder;
+import com.widiarifki.screentest.model.Guest
+import com.widiarifki.screentest.services.GuestService
+import com.widiarifki.screentest.services.ServiceBuilder
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * Created by widiarifki on 27/02/2018.
  */
 
-public class GuestPresenter {
-    IGuestView mView;
+class GuestPresenter(internal var mView: IGuestView) {
 
-    public GuestPresenter(IGuestView view) {
-        mView = view;
-    }
+    fun fetchGuestData() {
+        mView.showProgressDialogue(true)
 
-    public void fetchGuestData(){
-        mView.showProgressDialogue(true);
-
-        GuestService guestService = ServiceBuilder.buildService(GuestService.class);
-        Call<List<Guest>> guestRequest = guestService.getGuest();
-        guestRequest.enqueue(new Callback<List<Guest>>() {
-            @Override
-            public void onResponse(Call<List<Guest>> request, Response<List<Guest>> response) {
-                mView.showList(response.body());
+        val guestService = ServiceBuilder.buildService(GuestService::class.java)
+        val guestRequest = guestService.guest
+        guestRequest.enqueue(object : Callback<List<Guest>> {
+            override fun onResponse(request: Call<List<Guest>>, response: Response<List<Guest>>) {
+                mView.showList(response.body()!!)
             }
 
-            @Override
-            public void onFailure(Call<List<Guest>> request, Throwable t) {
-                mView.showGetDataFail();
+            override fun onFailure(request: Call<List<Guest>>, t: Throwable) {
+                mView.showGetDataFail()
             }
-        });
+        })
 
         /*OkHttpClient httpClient = new OkHttpClient();
         Request httpReq = new Request.Builder().url("http://dry-sierra-6832.herokuapp.com/api/people").build();
