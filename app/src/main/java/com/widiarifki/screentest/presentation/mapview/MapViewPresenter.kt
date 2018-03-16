@@ -13,21 +13,22 @@ import java.util.*
  */
 
 class MapViewPresenter(internal var mView: IMapView) {
-    var eventFragmentList: List<Fragment>? = null
+    lateinit var eventFragmentList: List<Fragment>
     var deviceScreen: String? = null
     lateinit var eventList: List<Event>
 
-    fun initializeScreen(context: Context, savedInstaceState: Bundle?, eventList: List<Event>) {
+    fun initializeScreen(context: Context, savedInstanceState: Bundle?, eventList: List<Event>) {
         this.eventList = eventList
         // Create fragments for Event Icon/Image
         generateEventFragments(eventList)
         // Determine value for device screen
         setDeviceScreen(context)
-        // View's role:
-        if(eventFragmentList != null)
-            mView.showHorizontalEventImg(eventFragmentList!!)
 
-        mView.initializeMap(savedInstaceState)
+        eventFragmentList.let {
+            mView.showHorizontalEventImg(eventFragmentList)
+        }
+
+        mView.initializeMap(savedInstanceState)
     }
 
     // Create fragments for Event Icon/Image
@@ -45,7 +46,6 @@ class MapViewPresenter(internal var mView: IMapView) {
             val event = it[position]
             mView.updateMapBasedOnEvent(event)
         }
-
     }
 
     // Set value for device screen (to enable the proper view of horizontal scrollable)
