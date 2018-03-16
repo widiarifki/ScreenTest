@@ -37,13 +37,11 @@ class MenuActivity : AppCompatActivity(), IMenuView, View.OnClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Constant.codeIntentEvent) {
-            if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == Constant.codeIntentEvent) {
                 writeEvent(data?.getStringExtra(Constant.extraTagEventName))
             }
-        }
-        else if (requestCode == Constant.codeIntentGuest) {
-            if (resultCode == Activity.RESULT_OK) {
+            else if (requestCode == Constant.codeIntentGuest) {
                 writeGuest(data?.getStringExtra(Constant.extraTagGuestName))
                 showDialogFromExtras(data?.getStringExtra(Constant.extraTagDialogMsg))
             }
@@ -67,7 +65,7 @@ class MenuActivity : AppCompatActivity(), IMenuView, View.OnClickListener {
     }
 
     override fun writeGuest(guestName: String?) {
-        btnGuest?.text = "SELECTED EVENT: $guestName"
+        btnGuest?.text = "SELECTED GUEST: $guestName"
     }
 
     override fun goToEvent() {

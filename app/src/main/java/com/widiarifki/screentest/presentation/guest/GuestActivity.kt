@@ -6,7 +6,6 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
 import com.widiarifki.screentest.R
 import com.widiarifki.screentest.adapter.GuestAdapter
 import com.widiarifki.screentest.model.Guest
@@ -41,7 +40,7 @@ class GuestActivity : AppCompatActivity(), IGuestView, SwipeRefreshLayout.OnRefr
     override fun showList(guestList: List<Guest>) {
         val mAdapter = GuestAdapter(this, guestList)
         recyclerView.adapter = mAdapter
-        recyclerView.layoutManager = GridLayoutManager(this, 2) as RecyclerView.LayoutManager?
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         // Turn off swipe refresh
         if(rvSwipeLayout.isRefreshing)
@@ -56,5 +55,6 @@ class GuestActivity : AppCompatActivity(), IGuestView, SwipeRefreshLayout.OnRefr
                 .setMessage(info)
                 .create()
                 .show()
+
     }
 }

@@ -10,7 +10,7 @@ import io.realm.Realm
 class HomePresenter(private val mView: IHomeView) {
 
     fun getPalindromeMessage(name: String) : String {
-        return name + " " + (if (isPalindrome(name)) "is Palindrome" else "No Palindrome")
+        return name + ": " + (if (isPalindrome(name)) "is Palindrome" else "No Palindrome")
     }
 
     private fun isPalindrome(name: String): Boolean {
