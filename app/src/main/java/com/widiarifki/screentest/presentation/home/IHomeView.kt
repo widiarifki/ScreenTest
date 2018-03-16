@@ -5,6 +5,5 @@ package com.widiarifki.screentest.presentation.home
  */
 
 interface IHomeView {
-    fun showDialogue(title: String, info: String)
     fun goToMenu()
 }

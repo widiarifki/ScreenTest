@@ -8,7 +8,5 @@ import com.widiarifki.screentest.model.Guest
 
 interface IGuestView {
     fun showList(guestList: List<Guest>)
-    fun showGetDataFail()
-    fun showProgressDialogue(isShowing: Boolean)
-    fun showDialogue(title: String, info: String)
+    fun showDialogMessage(title: String?, info: String)
 }

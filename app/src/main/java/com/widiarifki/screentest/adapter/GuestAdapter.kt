@@ -1,79 +1,69 @@
 package com.widiarifki.screentest.adapter
 
+import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Context
-import android.os.Bundle
-import android.support.v7.app.AlertDialog
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.widiarifki.screentest.MainActivity
+import com.widiarifki.screentest.Constant
 import com.widiarifki.screentest.R
 import com.widiarifki.screentest.model.Guest
-import com.widiarifki.screentest.presentation.menu.MenuFragment
+import kotlinx.android.synthetic.main.item_list_guest.view.*
 
 /**
  * Created by widiarifki on 24/02/2018.
  */
 
-class GuestAdapter(internal var mContext: Context?, internal var mObjects: List<Guest>) : RecyclerView.Adapter<GuestAdapter.GuestViewHolder>() {
+class GuestAdapter(internal var mContext: Context?, internal var mObjects: List<Guest>) : RecyclerView.Adapter<GuestAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GuestViewHolder? {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder? {
         val view = LayoutInflater.from(mContext).inflate(R.layout.item_list_guest, null)
-        view.setOnClickListener { v ->
-            val position = (parent as RecyclerView).getChildLayoutPosition(v)
-            val guestData = mObjects[position]
+        return ViewHolder(view)
+    }
 
-            // Conditional Display
-            val birthDateSplit = guestData.birthdate!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            val date = Integer.parseInt(birthDateSplit[2])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val guestData = mObjects[position]
+        holder.bind(guestData, position)
+    }
 
-            var displayedTxt = ""
-            if (date % 2 == 0 && date % 3 == 0)
-                displayedTxt = "iOS"
-            else if (date % 2 == 0)
-                displayedTxt = "Blackberry"
-            else if (date % 3 == 0)
-                displayedTxt = "Android"
-            else
-                displayedTxt = "Featured Phone"
+    override fun getItemCount(): Int = mObjects.count()
 
-            mContext?.let { AlertDialog.Builder(it).setMessage(displayedTxt).create().show() }
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        public fun bind(guest: Guest, position: Int){
+            itemView.txtName.text = guest.name
+            itemView.txtBirthDate.text = guest.birthdate
 
-            // Change Fragment
-            val args = Bundle()
-            args.putString("GUEST", guestData.name)
+            // Check whether month prime/not
+            val month = getMonth(guest.birthdate)
+            itemView.txtIsPrime.text = "Month Number: " + if (isPrime(month)) "PRIME" else "NOT PRIME"
 
-            val secondFrag = MenuFragment()
-            secondFrag.arguments = args
-            (mContext as MainActivity).setFragment(secondFrag, MenuFragment.TITLE)
+            // Click listener on item
+            itemView.setOnClickListener{v ->
+                val date = getDate(guest.birthdate)
+
+                val intent = Intent()
+                intent.putExtra(Constant.extraTagGuestName, guest.name)
+                intent.putExtra(Constant.extraTagDialogMsg, displayTextBasedOnDate(date))
+                (mContext as Activity).setResult(RESULT_OK, intent)
+                (mContext as Activity).finish()
+            }
         }
-        return GuestViewHolder(view)
     }
 
-    /*override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val dataItem = mObjects[position]
-        val viewHolder = holder as GuestViewHolder
-        viewHolder.txtName.text = dataItem.name
-        viewHolder.txtBirthDate.text = dataItem.birthdate
-        // Check whether month prime/not
-        val birthDateSplit = dataItem.birthdate.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val month = Integer.parseInt(birthDateSplit[1])
-        viewHolder.txtIsPrime.text = "Month Number: " + if (isPrime(month)) "PRIME" else "NOT PRIME"
-    }*/
-
-    override fun onBindViewHolder(viewHolder: GuestViewHolder?, position: Int) {
-        val dataItem = mObjects[position]
-        viewHolder!!.txtName.text = dataItem.name
-        viewHolder.txtBirthDate.text = dataItem.birthdate
-        // Check whether month prime/not
-        val birthDateSplit = dataItem.birthdate!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val month = Integer.parseInt(birthDateSplit[1])
-        viewHolder.txtIsPrime.text = "Month Number: " + if (isPrime(month)) "PRIME" else "NOT PRIME"
+    fun getDate(date: String?): Int {
+        val birthDateSplit = date?.split("-".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
+        return Integer.parseInt(birthDateSplit?.get(2))
     }
 
-    private fun isPrime(n: Int): Boolean {
+    fun getMonth(date: String?): Int {
+        val birthDateSplit = date?.split("-".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
+        return Integer.parseInt(birthDateSplit?.get(1))
+    }
+
+    fun isPrime(n: Int): Boolean {
         if (n < 2) return false
         for (i in 2 until n)
             if (n % i == 0)
@@ -81,19 +71,17 @@ class GuestAdapter(internal var mContext: Context?, internal var mObjects: List<
         return true
     }
 
-    override fun getItemCount(): Int {
-        return mObjects.size
-    }
+    fun displayTextBasedOnDate(date: Int): String {
+        var displayedTxt = ""
+        if (date % 2 == 0 && date % 3 == 0)
+            displayedTxt = "iOS"
+        else if (date % 2 == 0)
+            displayedTxt = "Blackberry"
+        else if (date % 3 == 0)
+            displayedTxt = "Android"
+        else
+            displayedTxt = "Featured Phone"
 
-    inner class GuestViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var txtName: TextView
-        var txtBirthDate: TextView
-        var txtIsPrime: TextView
-
-        init {
-            txtName = view.findViewById(R.id.txtName) as TextView
-            txtBirthDate = view.findViewById(R.id.txtBirthDate) as TextView
-            txtIsPrime = view.findViewById(R.id.txtIsPrime) as TextView
-        }
+        return displayedTxt
     }
 }

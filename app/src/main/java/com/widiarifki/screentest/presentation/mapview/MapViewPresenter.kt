@@ -2,6 +2,7 @@ package com.widiarifki.screentest.presentation.mapview
 
 import android.content.Context
 import android.content.res.Configuration
+import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.DisplayMetrics
 import com.widiarifki.screentest.model.Event
@@ -12,31 +13,42 @@ import java.util.*
  */
 
 class MapViewPresenter(internal var mView: IMapView) {
-    internal var mEventList: List<Event>? = null
+    var eventFragmentList: List<Fragment>? = null
     var deviceScreen: String? = null
-        internal set
+    lateinit var eventList: List<Event>
 
-    var eventList: List<Event>?
-        get() = mEventList
-        set(eventList) {
-            mEventList = eventList
-            val fragments = getFragmentListFormEvent(mEventList)
-            mView.showHorizontalImgFragment(fragments)
-        }
+    fun initializeScreen(context: Context, savedInstaceState: Bundle?, eventList: List<Event>) {
+        this.eventList = eventList
+        // Create fragments for Event Icon/Image
+        generateEventFragments(eventList)
+        // Determine value for device screen
+        setDeviceScreen(context)
+        // View's role:
+        if(eventFragmentList != null)
+            mView.showHorizontalEventImg(eventFragmentList!!)
 
-    private fun getFragmentListFormEvent(eventList: List<Event>?): List<Fragment> {
+        mView.initializeMap(savedInstaceState)
+    }
+
+    // Create fragments for Event Icon/Image
+    private fun generateEventFragments(eventList: List<Event>?) {
         val fragmentList = ArrayList<Fragment>()
-        //for (event in mEventList) {
-        for (event in mEventList.orEmpty()) {
-            fragmentList.add(ImageSlideFragment.newInstance(event.nama, event.imgResId))
+        for (event in eventList.orEmpty()) {
+            fragmentList.add(HorizontalImageFragment.newInstance(event.nama, event.imgResId))
         }
-        return fragmentList
+        this.eventFragmentList = fragmentList
     }
 
-    fun selectEvent(event: Event) {
-        mView.updateMapBasedOnEvent(event)
+    // Action when on select event fragment
+    fun selectEvent(position: Int) {
+        eventList.let {
+            val event = it[position]
+            mView.updateMapBasedOnEvent(event)
+        }
+
     }
 
+    // Set value for device screen (to enable the proper view of horizontal scrollable)
     fun setDeviceScreen(context: Context?) {
         var value = 20
         var str = ""

@@ -10,7 +10,7 @@ import com.widiarifki.screentest.model.Event
  */
 
 interface IMapView {
-    fun showHorizontalImgFragment(eventList: List<Fragment>)
+    fun showHorizontalEventImg(eventFragmentList: List<Fragment>)
     fun initializeMap(savedInstanceState: Bundle?)
     fun updateMapBasedOnEvent(event: Event)
 }

@@ -8,11 +8,7 @@ import java.util.*
  */
 
 class EventPresenter(internal var mView: IEventView) {
-    internal var mEventList: List<Event>
-
-    init {
-        mEventList = ArrayList()
-    }
+    internal var mEventList: List<Event> = ArrayList()
 
     fun setEventList(eventList: List<Event>) {
         mEventList = eventList

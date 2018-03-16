@@ -3,10 +3,11 @@ package com.widiarifki.screentest.presentation.guest
 import com.widiarifki.screentest.model.Guest
 import com.widiarifki.screentest.services.GuestService
 import com.widiarifki.screentest.services.ServiceBuilder
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import io.realm.Realm
 
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 /**
  * Created by widiarifki on 27/02/2018.
@@ -15,54 +16,33 @@ import retrofit2.Response
 class GuestPresenter(internal var mView: IGuestView) {
 
     fun fetchGuestData() {
-        mView.showProgressDialogue(true)
 
-        val guestService = ServiceBuilder.buildService(GuestService::class.java)
-        val guestRequest = guestService.guest
-        guestRequest.enqueue(object : Callback<List<Guest>> {
-            override fun onResponse(request: Call<List<Guest>>, response: Response<List<Guest>>) {
-                mView.showList(response.body()!!)
-            }
+        val apiService = ServiceBuilder.buildService(GuestService::class.java)
+        val realm = Realm.getDefaultInstance()
+        val realmQuery = realm.where(Guest::class.java)
+        val savedList: List<Guest>? = realmQuery.findAll()
 
-            override fun onFailure(request: Call<List<Guest>>, t: Throwable) {
-                mView.showGetDataFail()
-            }
-        })
+        //get user if it's already saved
+        if (savedList != null) {
+            mView.showList(savedList)
+        }
 
-        /*OkHttpClient httpClient = new OkHttpClient();
-        Request httpReq = new Request.Builder().url("http://dry-sierra-6832.herokuapp.com/api/people").build();
-        Call httpCall = httpClient.newCall(httpReq);
-        httpCall.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                mView.showGetDataFail();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if(response.isSuccessful() && response.code() == 200){
-                    String dataString = response.body().string();
-                    final List<Guest> guestList = new ArrayList<>();
-                    try {
-                        JSONArray dataJson = new JSONArray(dataString);
-                        if(dataJson.length() > 0){
-                            for(int i = 0; i < dataJson.length(); i++){
-                                JSONObject record = dataJson.getJSONObject(i);
-                                Guest guest = new Guest();
-                                guest.setId(record.getInt("id"));
-                                guest.setName(record.getString("name"));
-                                guest.setBirthdate(record.getString("birthdate"));
-                                guestList.add(guest);
+        apiService.getGuests()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { guestList ->
+                            realm.beginTransaction()
+                            realm.copyToRealmOrUpdate(guestList)
+                            realm.commitTransaction()
+                            mView.showList(guestList)
+                        },
+                        { error ->
+                            if(savedList != null && savedList.count() == 0) {
+                                mView.showDialogMessage("Something's Wrong", "Fetching data from server failed")
                             }
-
-                            mView.showList(guestList);
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        });*/
+                )
     }
+
 }
